@@ -7,31 +7,43 @@ request = require("superagent")
 chai = require("chai")
 assert = chai.assert
 expect = chai.expect
-describe "The Node Controller", ->
-  beforeEach (done) ->
-    
-    # request(sails.hooks.http.app);
-    done()
-    return
 
+describe "The Node Controller", ->
+
+  beforeEach (done) ->
+    # Clear nodes first
+    request.get("http://localhost:1337/node/deleteAll").end (err, res) ->
+      done()
   
-  # NodeController.find().exec(function(err, results) {
-  #     console.log(results);
-  #     done();
-  # });
   afterEach (done) ->
     done()
-    return
 
-  describe "when we load the node page", ->
-    it "should render the view", ->
+  describe "when requesting for nodes", ->
+
+    it "should be able to view new nodes", (done) ->
       request.get("http://localhost:1337/node").end (err, res) ->
-        sails.log res.body
+        # sails.log res.body
         expect(res.body).to.be.an "Array"
-        return
+        done()
 
-      return
 
-    return
+  describe 'when creating nodes', ->
 
-  return
+    it "should be able to create a new node", (done) ->
+      request.post("http://localhost:1337/node/?name=path&SUID=88")
+      .end (err, res) ->
+        sails.log res.status
+        expect(res.status).to.equal(200)
+        done()
+
+    it "should reject nodes with the same SUID", (done) ->
+      request.post("http://localhost:1337/node/?name=path&SUID=88")
+      .end (err, res) ->
+        sails.log res.status
+        expect(res.status).to.equal(200)
+
+        request.post("http://localhost:1337/node/?name=bla&SUID=88")
+        .end (err, res) ->
+          sails.log res.status
+          expect(res.status).to.equal(500);
+          done()

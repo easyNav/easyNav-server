@@ -14,5 +14,11 @@ module.exports = {
 	// 	res.send(id);
 	// }
 
+	deleteAll: function(req, res) {
+		Node.destroy({}).exec(function(err, nodes) {
+			res.json((nodes));
+		});
+	}
+
 };
 

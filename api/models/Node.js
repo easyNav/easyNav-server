@@ -12,7 +12,7 @@ module.exports = {
   		required: true
   	},
     SUID: {
-      type: 'integer', 
+      type: 'string', 
       required: true,
       unique: true
     }
