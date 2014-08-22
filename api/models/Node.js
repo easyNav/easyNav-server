@@ -9,15 +9,21 @@ module.exports = {
   attributes: {
   	name: {
   		type: 'string',
-  		required: true,
-  		unique: true
-  	}
+  		required: true
+  	},
+    SUID: {
+      type: 'integer', 
+      required: true,
+      unique: true
+    }
   },
 
   beforeValidate: function(node, cb) {
-  	Node.findOne(node.name).exec(function(err, theNode) {
+  	Node.findOne(node.SUID).exec(function(err, theNode) {
   		if (err) return cb(err);
   		if (theNode) return cb(new Error('Node exists.'));
+
+      // successful
   		cb(null, node);
   	});
   }

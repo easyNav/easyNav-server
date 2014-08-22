@@ -39,6 +39,10 @@
     "assert": "~1.1.1",
     "mocha": "~1.21.4",
     "grunt-mocha-test": "~0.11.0",
-    "sinon": "~1.10.3"
+    "sinon": "~1.10.3",
+    "mongoose": "~3.8.15",
+    "supertest": "~0.13.0",
+    "chai": "~1.9.1",
+    "coffee-script": "~1.7.1"
   }
 }

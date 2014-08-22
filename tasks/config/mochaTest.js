@@ -19,9 +19,10 @@ module.exports = function(grunt) {
 	grunt.config.set('mochaTest', {
 		test: {
 			options: {
-				reporter: 'spec'
+				reporter: 'spec', 
+				require: 'coffee-script/register'
 			},
-			src: ['tests/**/*.spec.js']
+			src: ['tests/**/*.spec.js', 'tests/**/*.spec.coffee']
 		}
 	});
 
