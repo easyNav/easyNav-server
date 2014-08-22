@@ -11,7 +11,7 @@ easyNav-server uses the Sails framework.  To run, execute:
 
 ## Development 
 
-To execute the app with continous TDD / file watching, use Nodemon
+To execute the app with continous TDD / file watching, use `node-dev`
 
-	$ npm install -g nodemon
-	$ nodemon-dev app.js
+	$ npm install -g node-dev
+	$ node-dev app.js
