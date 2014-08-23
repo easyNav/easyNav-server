@@ -50,5 +50,6 @@ module.exports.routes = {
 
   // Node control.  Default blueprints used.
   'get /node/deleteAll': 'NodeController.deleteAll',
+  'get /edge/deleteAll': 'EdgeController.deleteAll',
 
 };

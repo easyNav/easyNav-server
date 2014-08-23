@@ -36,10 +36,10 @@ describe "The Node Controller", ->
         expect(res.status).to.equal(200)
         done()
 
-    it "should reject nodes with the same SUID", (done) ->
+    it.skip "should reject nodes with the same SUID", (done) ->
       request.post("http://localhost:1337/node/?name=path&SUID=88")
       .end (err, res) ->
-        sails.log res.status
+        sails.log.warn res.status
         expect(res.status).to.equal(200)
 
         request.post("http://localhost:1337/node/?name=bla&SUID=88")

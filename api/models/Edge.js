@@ -44,17 +44,22 @@ module.exports = {
 
   beforeCreate: function(edge, callback) {
 
+    if (edge.source == edge.target) {
+      callback({error: 'Edge controller - duplicate nodes!'});
+    }
+
     async.series({
+
       source: function(cb) {
         Node.findOne({ SUID: edge.source }).exec( function(err, source) {
-          if (!source) return cb({error: 'source not found'});
+          if (!source) return cb({error: 'Edge controller - source not found'});
           cb(null, source);
         });
       },
 
       target: function(cb) {
         Node.findOne({ SUID: edge.target }).exec( function(err, target) {
-          if (!target) return cb({error: 'target not found'});
+          if (!target) return cb({error: 'Edge controller - target not found'});
           cb(null, target);
         });
       }

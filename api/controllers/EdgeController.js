@@ -8,5 +8,12 @@
 
 module.exports = {
 
+	// deletes all edges
+	deleteAll: function(req, res) {
+		Edge.destroy({}).exec(function(err, edges) {
+			res.json((edges));
+		});
+	}
+
 };
 
