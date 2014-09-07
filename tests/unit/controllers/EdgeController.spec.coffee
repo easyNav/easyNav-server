@@ -10,8 +10,8 @@ async = require('async')
 resetNodes = (cb) ->
   request.get("http://localhost:1337/node/deleteAll").end (err, res) ->
     request.get("http://localhost:1337/edge/deleteAll").end (err, res) ->
-      request.post("http://localhost:1337/node/?name=bla&SUID=85").end (err, res) ->
-        request.post("http://localhost:1337/node/?name=bla&SUID=90").end (err, res) ->
+      request.post("http://localhost:1337/node/?name=bla&SUID=85&x=2&y=4&z=3").end (err, res) ->
+        request.post("http://localhost:1337/node/?name=bla&SUID=90&x=3&y=1&z=8").end (err, res) ->
           cb()
 
 
@@ -57,6 +57,50 @@ describe "The Edge Controller", ->
 
       )
 
+    it 'should not be created if edges two nodes already exist', (done) ->
+
+      async.series({
+        shouldPass: (cb) ->
+          request.post("http://localhost:1337/edge/?source=90&target=85&SUID=14").end (err, res) ->
+            expect(res.status).to.eql(200)
+            cb()
+
+        sourceTarget: (cb) ->
+          request.post("http://localhost:1337/edge/?source=90&target=85&SUID=14").end (err, res) ->
+            expect(res.status).to.eql(500)
+            cb()
+
+        sourceWrong: (cb) ->
+          request.post("http://localhost:1337/edge/?source=85&target=90&SUID=14").end (err, res) ->
+            expect(res.status).to.eql(500)
+            cb()
+      },
+
+      (err, results) ->
+        expect(err).to.not.exist 
+        done()
+      )
+
+    it 'should be able to delete an edge', (done) ->
+
+      async.series({
+        createEdge: (cb) ->
+          request.post("http://localhost:1337/edge/?source=90&target=85&SUID=14").end (err, res) ->
+            expect(res.status).to.eql(200)
+            cb()
+
+        deleteEdge: (cb) ->
+          request.del("http://localhost:1337/edge/?SUID=14").end (err, res) ->
+            expect(res.status).to.eql(200)
+            cb()
+      },
+
+      (err, results) ->
+        expect(err).to.not.exist 
+        done()
+      )
+
+
       
 
 
@@ -67,7 +111,7 @@ describe "The Edge Controller", ->
   #   it "should be able to create a new node", (done) ->
   #     request.post("http://localhost:1337/node/?name=path&SUID=88")
   #     .end (err, res) ->
-  #       sails.log res.status
+  #       create.log res.status
   #       expect(res.status).to.equal(200)
   #       done()
 

@@ -28,18 +28,8 @@ module.exports = {
     target: {
     	type: 'string', 
     	required: true 
-    },
-
-    sourceColor: {
-    	type:'string', 
-    	required: true
-    },
-
-    targetColor: {
-    	type:'string', 
-    	required: true
     }
-
+    
   },
 
   beforeCreate: function(edge, callback) {
@@ -62,12 +52,19 @@ module.exports = {
           if (!target) return cb({error: 'Edge controller - target not found'});
           cb(null, target);
         });
+      },
+
+      existentEdge: function(cb) {
+        Edge.findOne({source: [edge.source, edge.target], 
+                      target: [edge.source, edge.target] }).exec( function(err, sameEdge) {
+          if (sameEdge) return cb({error: 'Edge controller - edge already exists'});
+          cb(null);
+        });
       }
     },
 
     function(err, results) {
       if (err) return callback(err);
-      
       callback(null, edge);
     });
   }

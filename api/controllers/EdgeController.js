@@ -11,9 +11,17 @@ module.exports = {
 	// deletes all edges
 	deleteAll: function(req, res) {
 		Edge.destroy({}).exec(function(err, edges) {
-			res.json((edges));
+			res.json(edges);
+		});
+	},
+
+	deleteBySuid: function(req, res) {
+		Edge.destroy({SUID: req.param('SUID') }).exec( function(err, edge) {
+			res.json(edge);
 		});
 	}
+
+
 
 };
 
