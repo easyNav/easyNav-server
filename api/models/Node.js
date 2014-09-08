@@ -6,6 +6,8 @@
 */
 
 module.exports = {
+  tableName: 'nodes', 
+
   attributes: {
   	name: {
   		type: 'string',

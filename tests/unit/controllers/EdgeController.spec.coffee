@@ -128,7 +128,7 @@ describe "The Edge Controller", ->
             cb()
 
       },
-      
+
       (err, results) ->
         expect(err).to.not.exist 
         done()

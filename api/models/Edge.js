@@ -9,6 +9,8 @@
 
 module.exports = {
 
+  tableName: 'edges', 
+
   attributes: {
   	name: {
   		type: 'string'
@@ -71,6 +73,11 @@ module.exports = {
       if (err) return callback(err);
       var source = results.source,
           target = results.target;
+
+      // converting as MySQL treats nested JSON as string lol
+      source.loc = JSON.parse(source.loc);
+      target.loc = JSON.parse(target.loc);
+
       var x2 = Math.pow(source.loc.x - target.loc.x, 2);
       var y2 = Math.pow(source.loc.y - target.loc.y, 2);
       var z2 = Math.pow(source.loc.z - target.loc.z, 2);
