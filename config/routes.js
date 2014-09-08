@@ -51,6 +51,8 @@ module.exports.routes = {
   'get /node/deleteAll': 'NodeController.deleteAll',
   'get /edge/deleteAll': 'EdgeController.deleteAll',
   'delete /edge': 'EdgeController.deleteBySuid',
-  'get /map': 'MapController.show'
+  'get /map': 'MapController.show',
+  'get /map/update': 'MapController.update',
+  'get /map/:to/:from': 'MapController.getShortestPath'
 
 };

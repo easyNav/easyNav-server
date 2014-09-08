@@ -23,7 +23,14 @@ module.exports = {
 	    	});
 	    });
 	});
+  },
 
+  update: function(req, res) {
+  	return res.json({msg: 'to implement!!'});
+  },
+
+  getShortestPath: function(req, res) {
+  	return res.json({msg: 'to implement!!'});
   }
 };
 
