@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		test: {
 			options: {
 				reporter: 'spec', 
-				timeout: '8000',
+				timeout: '20000',
 				require: 'coffee-script/register'
 			},
 			src: ['tests/**/*.spec.js', 'tests/**/*.spec.coffee']
