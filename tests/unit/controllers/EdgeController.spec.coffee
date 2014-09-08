@@ -100,6 +100,41 @@ describe "The Edge Controller", ->
         done()
       )
 
+    it 'should append a weight', (done) ->
+
+      async.series({
+        createEdge: (cb) ->
+          request.post("http://localhost:1337/edge/?source=90&target=85&SUID=14").end (err, res) ->
+            expect(res.status).to.eql(200)
+            expect(res.body.weight).to.be.within 5,7
+            expect(res.body.weight).to.be.at.least 0
+            cb()
+
+      },
+
+      (err, results) ->
+        expect(err).to.not.exist 
+        done()
+      )
+
+    it 'should calculate and append a weight, even if specified', (done) ->
+
+      async.series({
+        createEdge: (cb) ->
+          request.post("http://localhost:1337/edge/?source=90&target=85&SUID=14&weight=200").end (err, res) ->
+            expect(res.status).to.eql(200)
+            expect(res.body.weight).to.be.within 5,7
+            expect(res.body.weight).to.be.at.least 0
+            cb()
+
+      },
+      
+      (err, results) ->
+        expect(err).to.not.exist 
+        done()
+      )
+
+
 
       
 

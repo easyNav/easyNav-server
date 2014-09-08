@@ -28,6 +28,10 @@ module.exports = {
     target: {
     	type: 'string', 
     	required: true 
+    },
+
+    weight: {
+      type: 'string'
     }
     
   },
@@ -65,6 +69,12 @@ module.exports = {
 
     function(err, results) {
       if (err) return callback(err);
+      var source = results.source,
+          target = results.target;
+      var x2 = Math.pow(source.loc.x - target.loc.x, 2);
+      var y2 = Math.pow(source.loc.y - target.loc.y, 2);
+      var z2 = Math.pow(source.loc.z - target.loc.z, 2);
+      edge.weight = (Math.pow(x2 + y2 + z2, 0.5));
       callback(null, edge);
     });
   }
