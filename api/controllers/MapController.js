@@ -14,12 +14,17 @@ module.exports = {
    */
   show: function (req, res) {
 
+    var wrapWithData = function(target) {
+      return { data: target };
+    }
+
     Node.find({}).exec( function(err, nodes) {
 	    Edge.find({}).exec( function(err, edges) {
 	    	if (err) return res.json(400, { err: err } );
+
 	    	return res.json({
-	    		nodes: nodes,
-	    		edges: edges
+          nodes: _.map(nodes, wrapWithData, ''),
+	    		edges: _.map(edges, wrapWithData, '')
 	    	});
 	    });
 	});
