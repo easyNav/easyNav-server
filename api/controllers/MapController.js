@@ -24,9 +24,34 @@ module.exports = {
 	    Edge.find({}).exec( function(err, edges) {
 	    	if (err) return res.json(400, { err: err } );
 
+        var nodeResult = _.map(nodes, wrapWithData, '')
+          , edgesResult = _.map(edges, wrapWithData, '');
+
 	    	return res.json({
-          nodes: _.map(nodes, wrapWithData, ''),
-	    		edges: _.map(edges, wrapWithData, '')
+
+          // TODO: Apparently, ID is used instead of SUID for cytoscape JS.  So SUID is swapped for ID.
+          //TODO: Clean up the remapping code below -------------------
+          nodes: _.forEach(nodeResult, function(node) {
+            node.data.id = node.data.SUID;
+            delete node.data.SUID;
+
+            node.data.loc = JSON.parse(node.data.loc);
+            node.position = {
+              x: parseFloat(node.data.loc.x),
+              y: parseFloat(node.data.loc.y),
+              z: parseFloat(node.data.loc.z)
+            };
+            delete node.data.loc;
+            node.locked = true;
+
+          }),
+	    		edges: _.forEach(edgesResult, function(edge) {
+            edge.data.id = edge.data.SUID;
+            delete edge.data.SUID;
+
+
+          })
+
 	    	});
 	    });
 	});

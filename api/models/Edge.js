@@ -63,7 +63,7 @@ module.exports = {
           cb(null, source);
         });
       },
-
+// 
       target: function(cb) {
         Node.findOne({ SUID: edge.target }).exec( function(err, target) {
           if (!target) return cb({error: 'Edge controller - target not found'});
@@ -102,7 +102,6 @@ module.exports = {
     async.each(edges, 
 
     function(edge, callback) {
-      sails.log (edge);
       Edge.create(edge).exec(function (err, created) {
         callback(err);
       });
