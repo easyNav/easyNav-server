@@ -34,6 +34,40 @@ module.exports = {
 
 
   update: function(req, res) {
+
+    var nusToCytoscape = function(input, cb) {
+
+      var remapNodes = function(target) {
+        return {
+          name: target.nodeName,
+          SUID: target.nodeId,
+          loc: {
+            x: target.x,
+            y: target.y,
+            z: 0
+          }
+        };
+      }
+
+
+      var remapEdges = function(target) {
+        var edgesList = [], i;
+        var destList = target.linkTo.split(',');
+        for (i = 0; i < target.linkTo.destList; i++) {
+          edgesList.push({
+            name: '', 
+            SUID: '',                   // todo
+            source: target.nodeId, 
+            target: destList[i],
+            interaction: 'undirected', 
+            shared_interaction: 'undirected'
+          });
+        }
+        return edgesList;
+      };
+
+    };
+
     request
       .get('http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=DemoBuilding&Level=1')
       .end(function(nusRes) {
