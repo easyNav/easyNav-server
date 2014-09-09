@@ -33,6 +33,14 @@ module.exports = {
     },
 
     weight: {
+      type: 'float'
+    },
+
+    interaction: {
+      type: 'string'
+    },
+
+    shared_interaction: {
       type: 'string'
     }
     
@@ -43,6 +51,9 @@ module.exports = {
     if (edge.source == edge.target) {
       callback({error: 'Edge controller - duplicate nodes!'});
     }
+
+    edge.interaction = 'undirected';
+    edge.shared_interaction = 'undirected';
 
     async.series({
 

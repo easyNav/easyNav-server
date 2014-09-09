@@ -1,0 +1,79 @@
+{
+  "format_version" : "1.0",
+  "generated_by" : "cytoscape-3.1.1",
+  "target_cytoscapejs_version" : "~2.1",
+  "data" : {
+    "selected" : true,
+    "__Annotations" : [ ],
+    "shared_name" : "Network",
+    "SUID" : 52,
+    "name" : "Network"
+  },
+  "elements" : {
+    "nodes" : [ {
+      "data" : {
+        "id" : "68",
+        "selected" : false,
+        "shared_name" : "Node 3",
+        "SUID" : 68,
+        "name" : "Node 3"
+      }
+    }, {
+      "data" : {
+        "id" : "66",
+        "selected" : false,
+        "shared_name" : "Node 2",
+        "SUID" : 66,
+        "name" : "Node 2"
+      }
+    }, {
+      "data" : {
+        "id" : "64",
+        "selected" : false,
+        "shared_name" : "Node 1",
+        "SUID" : 64,
+        "name" : "Node 1"
+      }
+    } ],
+    "edges" : [ {
+      "data" : {
+        "id" : "74",
+        "source" : "68",
+        "target" : "64",
+        "selected" : false,
+        "weight" : 8,
+        "SUID" : 74,
+        "name" : "Node 3 (undirected) Node 1",
+        "interaction" : "undirected",
+        "shared_name" : "Node 3 (undirected) Node 1",
+        "shared_interaction" : "undirected"
+      }
+    }, {
+      "data" : {
+        "id" : "72",
+        "source" : "68",
+        "target" : "66",
+        "selected" : false,
+        "weight" : 3,
+        "SUID" : 72,
+        "name" : "Node 3 (undirected) Node 2",
+        "interaction" : "undirected",
+        "shared_name" : "Node 3 (undirected) Node 2",
+        "shared_interaction" : "undirected"
+      }
+    }, {
+      "data" : {
+        "id" : "70",
+        "source" : "64",
+        "target" : "66",
+        "selected" : false,
+        "weight" : 2,
+        "SUID" : 70,
+        "name" : "Node 1 (undirected) Node 2",
+        "interaction" : "undirected",
+        "shared_name" : "Node 1 (undirected) Node 2",
+        "shared_interaction" : "undirected"
+      }
+    } ]
+  }
+}

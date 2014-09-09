@@ -29,9 +29,9 @@ module.exports = {
     // check if coordinates exist in node
     if (node.x &&  node.y && node.z) {
       node.loc = {
-        x: node.x,
-        y: node.y,
-        z: node.z
+        x: parseFloat(node.x),
+        y: parseFloat(node.y),
+        z: parseFloat(node.z)
       }
 
       delete node.x;
