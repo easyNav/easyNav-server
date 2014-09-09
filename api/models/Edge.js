@@ -95,6 +95,23 @@ module.exports = {
       edge.weight = (Math.pow(x2 + y2 + z2, 0.5));
       callback(null, edge);
     });
+  },
+
+
+  saveMany: function(edges, cb) {
+    async.each(edges, 
+
+    function(edge, callback) {
+      sails.log (edge);
+      Edge.create(edge).exec(function (err, created) {
+        callback(err);
+      });
+    },
+
+    function(err) {
+      if (err) return cb(new Error('failed to process edges'));
+      cb(); 
+    });
   }
 };
 

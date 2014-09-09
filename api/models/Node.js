@@ -27,7 +27,9 @@ module.exports = {
   beforeValidate: function(node, cb) {
 
     // check if coordinates exist in node
-    if (node.x &&  node.y && node.z) {
+
+    if (node.loc) {
+    } else if (node.x &&  node.y && node.z) {
       node.loc = {
         x: parseFloat(node.x),
         y: parseFloat(node.y),
@@ -49,7 +51,21 @@ module.exports = {
       // successful
   		cb(null, node);
   	});
-  }
+  },
 
+  saveMany: function(nodes, cb) {
+    async.each(nodes, 
+
+    function(node, callback) {
+      Node.create(node).exec(function (err, created) {
+        callback(err);
+      });
+    },
+
+    function(err) {
+      if (err) return cb(new Error('failed to process nodes'));
+      cb(); 
+    });
+  }
 };
 

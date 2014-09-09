@@ -34,9 +34,10 @@ module.exports = {
 
 
   update: function(req, res) {
+    //TODO: Refactor and move this conversion function out of space
+    var nusToCytoscape = function(input, cbDone) {
 
-    var nusToCytoscape = function(input, cb) {
-
+      // iterator fn used for _.map
       var remapNodes = function(target) {
         return {
           name: target.nodeName,
@@ -49,35 +50,58 @@ module.exports = {
         };
       }
 
-
-      var remapEdges = function(target) {
-        var edgesList = [], i;
-        var destList = target.linkTo.split(',');
-        for (i = 0; i < target.linkTo.destList; i++) {
+      // iterator fn used for _.map
+      var remapEdges = function(target, idx) {
+        var edgesList = [], i = 0, u = 0;
+        var destList = target.linkTo.replace(/ /g,'').split(',');
+        for (i = 0; i < destList.length; i++) {
           edgesList.push({
-            name: '', 
-            SUID: '',                   // todo
+            name: 'edge', 
+            SUID: 'idx' + idx + 'e' + u.toString(),
             source: target.nodeId, 
             target: destList[i],
             interaction: 'undirected', 
             shared_interaction: 'undirected'
           });
+          u++;
         }
         return edgesList;
       };
 
+
+      // actual process goes here
+      var mapObj = {
+        nodes: _.map(input.map, remapNodes),
+        edges: _.flatten(_.map(input.map), remapEdges)
+      };
+
+      async.series({
+        createNodes: function(cb) {
+          Node.saveMany(mapObj.nodes, function(err) {
+            cb(err);
+          });
+        },
+        createEdges: function(cb) {
+          Edge.saveMany(mapObj.edges, function(err) {
+            cb(err);
+          });
+        }
+      },
+      function(err) {
+        return cbDone(err, mapObj);
+      });
     };
 
+
+    // Do actual request here
     request
       .get('http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=DemoBuilding&Level=1')
       .end(function(nusRes) {
-        return res.json(JSON.parse(nusRes.text));
-        // sails.log (JSON.parse(res.text));
-      } );
-
-      // sails.log (JSON.parse(res.text));
-
-  	// return res.json({msg: 'to implement!!'});
+        nusToCytoscape(JSON.parse(nusRes.text), function(err, obj) {
+          if (err) return res.serverError(err);
+          return res.json(obj);
+        });
+      });
   },
 
   getShortestPath: function(req, res) {
