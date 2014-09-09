@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+ var request = require('superagent');
+
 module.exports = {
 	
 
@@ -30,8 +32,18 @@ module.exports = {
 	});
   },
 
+
   update: function(req, res) {
-  	return res.json({msg: 'to implement!!'});
+    request
+      .get('http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=DemoBuilding&Level=1')
+      .end(function(nusRes) {
+        return res.json(JSON.parse(nusRes.text));
+        // sails.log (JSON.parse(res.text));
+      } );
+
+      // sails.log (JSON.parse(res.text));
+
+  	// return res.json({msg: 'to implement!!'});
   },
 
   getShortestPath: function(req, res) {
