@@ -54,6 +54,9 @@ module.exports.routes = {
   'delete /edge': 'EdgeController.deleteBySuid',
   'get /map': 'MapController.show',
   'get /map/update': 'MapController.update',
-  'get /map/:from/:to': 'MapController.getShortestPath'
+  'get /map/:from/:to': 'MapController.getShortestPath',
+
+  'get /heartbeat/location' : 'LocationController.retrieve', 
+  'post /heartbeat/location' : 'LocationController.update'
 
 };
