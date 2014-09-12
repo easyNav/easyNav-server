@@ -50,6 +50,7 @@ module.exports.routes = {
   // Node control.  Default blueprints used.
   'get /node/deleteAll': 'NodeController.deleteAll',
   'get /edge/deleteAll': 'EdgeController.deleteAll',
+  'get /sonar/deleteAll': 'SonarController.deleteAll',
   'delete /edge': 'EdgeController.deleteBySuid',
   'get /map': 'MapController.show',
   'get /map/update': 'MapController.update',
