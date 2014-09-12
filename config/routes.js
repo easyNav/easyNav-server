@@ -53,6 +53,6 @@ module.exports.routes = {
   'delete /edge': 'EdgeController.deleteBySuid',
   'get /map': 'MapController.show',
   'get /map/update': 'MapController.update',
-  'get /map/:to/:from': 'MapController.getShortestPath'
+  'get /map/:from/:to': 'MapController.getShortestPath'
 
 };
