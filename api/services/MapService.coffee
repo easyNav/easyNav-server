@@ -169,7 +169,11 @@ module.exports = showCyMap: (callback) ->
   MapService.shortestPathNodeIds nodeFrom, nodeTo, (err, nodeIds) ->
     if err then callback(err)
     Node.find({ SUID : nodeIds }).exec (err, nodes) ->
-      callback(err, nodes)
+      result = []
+      for x in nodeIds 
+        node = _.find(nodes, {SUID: x});
+        result.push(node) if node
+      callback(err, result)
 
 
 
