@@ -1,5 +1,5 @@
 ###*
-MapService
+LocationService
 
 @description :: Server-side logic for managing maps
 @help        :: See http://links.sailsjs.org/docs/controllers
