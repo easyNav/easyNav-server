@@ -16,7 +16,8 @@ describe "The Sonar Controller", ->
       done()
   
   afterEach (done) ->
-    done()
+    request.get("http://localhost:1337/heartbeat/sonar/deleteAll").end (err, res) ->
+      done()
 
   describe "when requesting for sonar", ->
 

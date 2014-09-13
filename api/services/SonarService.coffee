@@ -50,6 +50,12 @@ module.exports = update: (opts, callback) ->
         callback(err, sonar)
 
 
+, retrieveAll: (callback) ->
+  Sonar.find({}).exec (err, sonars) ->
+    callback(err) if err 
+    callback(null, sonars)
+
+
 , exists: (id, callback) ->
   Sonar.findOne({ name: id }).exec (err, sonar) ->
     callback(err) if err

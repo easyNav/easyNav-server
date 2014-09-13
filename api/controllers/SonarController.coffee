@@ -31,7 +31,7 @@ module.exports = deleteAll: (req, res) ->
 
 
 , retrieveAll: (req, res) ->
-  Sonar.find({}).exec (err, sonars) ->
+  SonarService.retrieveAll (err, sonars) ->
     res.serverError(err) if err 
     res.json(sonars)
 

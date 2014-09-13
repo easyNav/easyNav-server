@@ -56,6 +56,7 @@ module.exports.routes = {
   'get /map/update': 'MapController.update',
   'get /map/:from/:to': 'MapController.getShortestPath',
 
+  'get /heartbeat' : 'HeartbeatController.retrieve',
   'get /heartbeat/location' : 'LocationController.retrieve', 
   'post /heartbeat/location' : 'LocationController.update',
   'get /heartbeat/sonar/:name' : 'SonarController.retrieve', 
