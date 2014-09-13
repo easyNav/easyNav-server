@@ -11,6 +11,7 @@ module.exports = {
   attributes: {
   	name: {
   		type: 'string',
+      primaryKey: true,
   		required: true
   	},
   	distance: {
@@ -20,7 +21,9 @@ module.exports = {
   },
 
   beforeValidate: function (sonar, cb) {
-  	sonar.distance = parseFloat(sonar.distance);
+    if (typeof sonar.distance === 'string') {
+    	sonar.distance = parseFloat(sonar.distance);
+    }
   	cb(null, sonar);
   }
 };

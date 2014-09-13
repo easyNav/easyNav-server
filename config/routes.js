@@ -50,13 +50,16 @@ module.exports.routes = {
   // Node control.  Default blueprints used.
   'get /node/deleteAll': 'NodeController.deleteAll',
   'get /edge/deleteAll': 'EdgeController.deleteAll',
-  'get /sonar/deleteAll': 'SonarController.deleteAll',
+  'get /heartbeat/sonar/deleteAll': 'SonarController.deleteAll',
   'delete /edge': 'EdgeController.deleteBySuid',
   'get /map': 'MapController.show',
   'get /map/update': 'MapController.update',
   'get /map/:from/:to': 'MapController.getShortestPath',
 
   'get /heartbeat/location' : 'LocationController.retrieve', 
-  'post /heartbeat/location' : 'LocationController.update'
+  'post /heartbeat/location' : 'LocationController.update',
+  'get /heartbeat/sonar/:name' : 'SonarController.retrieve', 
+  'get /heartbeat/sonar' : 'SonarController.retrieveAll', 
+  'post /heartbeat/sonar/:name' : 'SonarController.update'
 
 };
