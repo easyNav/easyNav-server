@@ -15,7 +15,7 @@ module.exports = deleteAll: (req, res) ->
     distance: req.param('distance')
 
   }, (err, sonar) ->
-    res.serverError(err) if err
+    res.servererror(err) if err
     res.json(sonar)
   )
 
