@@ -59,6 +59,7 @@ module.exports.routes = {
   'get /map': 'MapController.show',
   'get /map/update': 'MapController.update',
   'get /map/:from/:to': 'MapController.getShortestPath',
+  'get /map/nearest': 'MapController.getNearestNode',
 
   'get /heartbeat' : 'HeartbeatController.retrieve',
   'get /heartbeat/location' : 'LocationController.retrieve', 

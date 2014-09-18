@@ -176,5 +176,29 @@ module.exports = showCyMap: (callback) ->
       callback(err, result)
 
 
+, nearestNodeFromPos: (callback) ->
+  async.waterfall [
+    (cb) ->
+      LocationService.retrieve (err, person) ->
+        cb(null, person)
+
+    (person, cb) ->
+      Node.find({
+        SUID: { '!' : -1}  
+      }).exec (err, nodes) ->
+
+        ##TODO: implement distance algorithm here!!
+
+
+        cb(null, nodes)
+
+
+  ],
+
+  (err, result) ->
+    callback(err, result)
+
+
+
 
 

@@ -34,6 +34,13 @@ module.exports = {
       if (err) res.serverError(err);
       res.json(200, data);
     });
+  },
+
+  getNearestNode: function(req, res) {
+    MapService.nearestNodeFromPos(function (err, data) {
+      if (err) res.serverError(err);
+      res.json(200, data);
+    });
   }
 };
 
