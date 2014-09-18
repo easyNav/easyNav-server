@@ -29,6 +29,15 @@ module.exports = {
     });
   },
 
+
+  destroy: function(req, res) {
+    MapService.destroy(function(err, data) {
+      if (err) res.serverError(err);
+      res.json(200, {result: 'cleared map'});
+    });
+  },
+
+
   getShortestPath: function(req, res) {
     MapService.shortestPath(req.param('from'), req.param('to'), function(err, data) {
       if (err) res.serverError(err);

@@ -101,7 +101,7 @@ module.exports = showCyMap: (callback) ->
       return
 
     # Do actual request here
-    request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=DemoBuilding&Level=1").end (nusRes) ->
+    request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=COM1&Level=2").end (nusRes) ->
       nusToCytoscape JSON.parse(nusRes.text), (err, obj) ->
         return callback(err, obj)
 
@@ -177,28 +177,46 @@ module.exports = showCyMap: (callback) ->
 
 
 , nearestNodeFromPos: (callback) ->
-  async.waterfall [
-    (cb) ->
+  async.parallel {
+    person: (cb) ->
       LocationService.retrieve (err, person) ->
         cb(null, person)
 
-    (person, cb) ->
+    , nodes: (cb) ->
       Node.find({
         SUID: { '!' : -1}  
       }).exec (err, nodes) ->
-
-        ##TODO: implement distance algorithm here!!
-
-
         cb(null, nodes)
 
+  },
 
-  ],
+  (err, results) ->
+    result = {
+      nearestNode: null
+      nearestDist: null
+    }
+    a = results.person.loc
+    a = JSON.parse(a) if (typeof a) is 'string'
 
-  (err, result) ->
+    _.forEach results.nodes, (node) ->
+      pow = Math.pow
+      b = JSON.parse(node.loc)
+      dist = Math.sqrt(pow(a.x - b.x, 2) 
+        + pow(a.y - b.y, 2) 
+        + pow(a.z - b.z, 2) )
+
+      if (result.nearestDist is null) or (result.nearestDist > dist)
+        result = {
+          nearestNode: b 
+          nearestDist: dist
+        }
+
     callback(err, result)
 
 
-
+, destroy: (callback) ->
+  Edge.destroy().exec (err, edges) ->
+    Node.destroy().exec (err, nodes) ->
+      callback(err, {edges: edges, nodes: nodes})
 
 

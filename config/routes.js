@@ -57,6 +57,7 @@ module.exports.routes = {
   'get /heartbeat/sonar/deleteAll': 'SonarController.deleteAll',
   'delete /edge': 'EdgeController.deleteBySuid',
   'get /map': 'MapController.show',
+  'delete /map': 'MapController.destroy',
   'get /map/update': 'MapController.update',
   'get /map/:from/:to': 'MapController.getShortestPath',
   'get /map/nearest': 'MapController.getNearestNode',
