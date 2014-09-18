@@ -50,6 +50,14 @@ module.exports = {
       if (err) res.serverError(err);
       res.json(200, data);
     });
+  },
+
+
+  goto: function(req, res) {
+    MapService.goto(req.param('to'), function(err, data) {
+      if (err) res.serverError(err);
+      res.json(200, data);
+    });
   }
 };
 

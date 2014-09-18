@@ -207,7 +207,7 @@ module.exports = showCyMap: (callback) ->
 
       if (result.nearestDist is null) or (result.nearestDist > dist)
         result = {
-          nearestNode: b 
+          nearestNode: node
           nearestDist: dist
         }
 
@@ -218,5 +218,15 @@ module.exports = showCyMap: (callback) ->
   Edge.destroy().exec (err, edges) ->
     Node.destroy().exec (err, nodes) ->
       callback(err, {edges: edges, nodes: nodes})
+
+
+, goto: (nodeTo, callback) ->
+  sails.log nodeTo
+  MapService.nearestNodeFromPos (err, result) ->
+    nodeFrom = result.nearestNode.SUID
+    sails.log nodeFrom
+    MapService.shortestPath nodeFrom, nodeTo,  (err, result) ->
+      callback(err, result)
+
 
 
