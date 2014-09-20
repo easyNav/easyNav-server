@@ -21,7 +21,9 @@ module.exports = {
 
     loc: {
       type: 'json'
-    }
+    },
+
+    orientation: 'string'
   },
 
   beforeValidate: function(node, cb) {

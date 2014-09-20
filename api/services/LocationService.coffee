@@ -21,9 +21,9 @@ module.exports = update: (opts, callback) ->
         loc: {
           x: parseFloat(opts.x),
           y: parseFloat(opts.y),
-          z: parseFloat(opts.z),
-          orientation: parseFloat(opts.orientation)
-        }
+          z: parseFloat(opts.z)
+        },
+        orientation: parseFloat(opts.orientation)
       }).exec (err, person) ->
        callback(err, person)
 
@@ -34,9 +34,9 @@ module.exports = update: (opts, callback) ->
         loc: {
           x: opts.x,
           y: opts.y,
-          z: opts.z,
-          orientation: opts.orientation
-        }
+          z: opts.z
+        },
+        orientation: opts.orientation
       }).exec (err, person) ->
         callback(err, person)
 
@@ -53,9 +53,9 @@ module.exports = update: (opts, callback) ->
         loc: {
           x: parseFloat('0'),
           y: parseFloat('0'),
-          z: parseFloat('0'),
-          orientation: parseFloat('0')
-        }
+          z: parseFloat('0')
+        },
+        orientation: parseFloat('0')
       }).exec (err, person) ->
         callback(err, person)
 
