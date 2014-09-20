@@ -9,7 +9,8 @@ module.exports = update: (req, res) ->
   LocationService.update({
     x: req.param('x'),
     y: req.param('y'),
-    z: req.param('z')
+    z: req.param('z'),
+    orientation: req.param('orientation')
   }, (err, person) ->
     res.serverError(err) if err
     res.json(person)
