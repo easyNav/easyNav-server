@@ -23,7 +23,10 @@ module.exports = {
       type: 'json'
     },
 
-    orientation: 'string'
+    orientation: {
+      type: 'string', 
+      defaultsTo: '0'
+    }
   },
 
   beforeValidate: function(node, cb) {
