@@ -16,9 +16,29 @@ module.exports = {
 
 	deleteAll: function(req, res) {
 		Node.destroy({}).exec(function(err, nodes) {
-			res.json((nodes));
+			res.json(nodes);
+		});
+	},
+
+
+	summary: function(req, res) {
+		Node.find().exec(function(err, nodes) {
+			if (nodes.length === 0)
+				return res.json({})
+			result = _.map(nodes, 
+				function(node) {
+					return {
+						name: node.name, 
+						id: node.id,
+						SUID: node.SUID
+					}
+				});
+
+			res.json(result);
 		});
 	}
+
+
 
 };
 
