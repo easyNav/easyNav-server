@@ -42,7 +42,7 @@ module.exports = showCyMap: (callback) ->
           return
         )
 
-, populateMap: (callback) ->
+, populateMap: (building="COM1", floor="2", callback) ->
     #TODO: Refactor and move this conversion function out of space
     nusToCytoscape = (input, cbDone) ->
       
@@ -101,7 +101,7 @@ module.exports = showCyMap: (callback) ->
       return
 
     # Do actual request here
-    request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=COM1&Level=2").end (nusRes) ->
+    request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=#{building}&Level=#{floor}").end (nusRes) ->
       nusToCytoscape JSON.parse(nusRes.text), (err, obj) ->
         return callback(err, obj)
 

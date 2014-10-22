@@ -23,7 +23,7 @@ module.exports = {
 
 
   update: function(req, res) {
-    MapService.populateMap(function(err, data) {
+    MapService.populateMap(req.param('building'), req.param('floor'), function(err, data) {
       if (err) res.serverError(err);
       res.json(200, data);
     });

@@ -7,6 +7,11 @@
 <script src="js/dependencies/sails.io.js"></script>
 <script src="js/dependencies/cytoscape.min.js"></script>
 
+<!-- for Cytoscape navigator -->
+  <link href="styles/dependencies/cytoscape.js-navigator.css" rel="stylesheet" type="text/css" />
+  <script src="js/dependencies/cytoscape.js-navigator.js"></script>
+<!-- end Cytoscape navigator -->
+
 <script type="text/javascript">
 
     console.log ('helo world');
@@ -19,6 +24,13 @@
 
 var cy = cytoscape({
   container: $('#cy')[0],
+  panningEnabled: true,
+  userPanningEnabled: true,
+  boxSelectionEnabled: true,
+  ready: function(){
+    $('#cy').cytoscapeNavigator()
+  },
+
   
   style: cytoscape.stylesheet()
     .selector('node')
@@ -45,10 +57,15 @@ var cy = cytoscape({
     padding: 10
   }
 });
-  
+
+
 cy.on('tap', 'node', function(){
   window.open( this.data('href') );
 });
+
+cy.panningEnabled(true);
+cy.userPanningEnabled(true);
+
 
 
 setInterval(function() {
