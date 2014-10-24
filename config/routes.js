@@ -63,6 +63,8 @@ module.exports.routes = {
   'get /map/shortest/:from/:to': 'MapController.getShortestPath',
   'get /map/nearest': 'MapController.getNearestNode',
   'get /map/goto/:to': 'MapController.goto',
+  'get /heartbeat2/sm': 'HeartbeatSemaphoreController.view',
+  'post /heartbeat2/sm': 'HeartbeatSemaphoreController.update',
 
   'get /heartbeat' : 'HeartbeatController.retrieve',
   'get /heartbeat/location' : 'LocationController.retrieve', 

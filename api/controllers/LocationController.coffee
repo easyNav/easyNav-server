@@ -6,15 +6,34 @@ LocationController
 ###
 
 module.exports = update: (req, res) ->
-  LocationService.update({
-    x: req.param('x'),
-    y: req.param('y'),
-    z: req.param('z'),
-    orientation: req.param('orientation')
-  }, (err, person) ->
+
+  async.waterfall [
+    (cb) -> 
+      LocationService.retrieve (err, person) ->
+        cb(err) if err
+        cb null, person
+
+
+    (person, cb) ->
+      if (!req.param('orientation'))
+        sails.log('GOT A NULL FOR ORIENTATION')
+
+      LocationService.update({
+        x: req.param('x'),
+        y: req.param('y'),
+        z: req.param('z'),
+        orientation: req.param('orientation') || person.orientation
+
+      }, (err, updatedPerson) ->
+        cb(err) if err 
+        cb err, updatedPerson
+      )
+      
+  ], (err, updatedPerson) ->
     res.serverError(err) if err
-    res.json(person)
-  )
+    res.json(updatedPerson)
+
+
 
 , retrieve: (req, res) ->
   LocationService.retrieve (err, person) ->
