@@ -8,17 +8,19 @@ MapService
 async = require 'async'
 
 module.exports = view: (callback) ->
-  HeartbeatSemaphore.findOne {id: 1}, (err, sm) ->
+  HeartbeatSemaphore.findOne({id: 1}).exec (err, sm) ->
     callback(err) if err
-    callback(err, sm) if sm
+    sails.log "SM VAL:  #{sm}"
     if (!sm)
       HeartbeatSemaphore.create({
         x: 0
         y: 0
         val: 0
-      }).exec(err, sm) ->
+      }).exec (err, sm) ->
         sails.log 'reached'
-        callback err, sm
+        callback(err, sm)
+
+    callback(err, sm) if sm
 
 , update: (opts, callback) ->
     HeartbeatSemaphore.update({id: 1}, {
