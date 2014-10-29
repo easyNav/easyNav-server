@@ -15,3 +15,13 @@ To execute the app with continous TDD / file watching, use `node-dev`
 
 	$ npm install -g node-dev
 	$ node-dev app.js
+
+
+## Deployment
+
+To disable Grunt during deployment, insert into `.sailsrc`:
+
+	
+  "hooks": {
+  	"grunt": false
+  }
