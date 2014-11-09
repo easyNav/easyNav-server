@@ -43,127 +43,151 @@ module.exports = showCyMap: (callback) ->
         )
 
 , populateMap: (building="COM1", floor="2", callback) ->
-    #TODO: Refactor and move this conversion function out of space
-    nusToCytoscape = (input, cbDone) ->
-      
-      # iterator fn used for _.map
-      remapNodes = (target) ->
-        name: target.nodeName
-        SUID: target.nodeId
-        loc:
-          x: target.x
-          y: target.y
-          z: 0
+  ###################
+  ### IMPORTANT
+  Node SUID encodes building and floor information.
+  [buildingCode][floor][ID]
+  ###################
+  
+  ## TODO: Fix!!  Somehow, SUID field of node is coerced into an int.
 
-      
-      # iterator fn used for _.map
-      remapEdges = (target, idx) ->
-        edgesList = []
-        i = 0
-        u = 0
-        destList = target.linkTo.replace(RegExp(" ", "g"), "").split(",")
-        i = 0
-        while i < destList.length
-          edgesList.push
-            name: "edge"
-            SUID: "idx" + idx + "e" + u.toString()
-            source: target.nodeId
-            target: destList[i]
-            interaction: "undirected"
-            shared_interaction: "undirected"
+  if building is 'COM1'
+    buildingCode = '1'
+  else if building is 'COM2'
+    buildingCode = '2'
+  buildingCode = String(buildingCode) || 0 # default is 0
+  floor = String(floor) || 0 # default is 0
 
-          u++
-          i++
-        edgesList
+  sails.log "Loaded FLOOR=#{floor} BUILDING=#{building}."
+  ## /TODO: Fix!!  Somehow, SUID field of node is coerced into an int.
 
-      
-      # actual process goes here
-      mapObj =
-        nodes: _.map(input.map, remapNodes)
-        edges: _.flatten(_.map(input.map), remapEdges)
 
-      async.series
-        createNodes: (cb) ->
-          Node.saveMany mapObj.nodes, (err) ->
-            cb err
-            return
+  #TODO: Refactor and move this conversion function out of space
+  nusToCytoscape = (input, cbDone) ->
+    
+    # iterator fn used for _.map
+    remapNodes = (target) ->
+      name: target.nodeName
+      # SUID: target.nodeId
+      SUID: buildingCode + floor + String(target.nodeId)
+      loc:
+        x: target.x
+        y: target.y
+        z: 0
 
+    
+    # iterator fn used for _.map
+    remapEdges = (target, idx) ->
+      edgesList = []
+      i = 0
+      u = 0
+      tmpDestList = target.linkTo.replace(RegExp(" ", "g"), "").split(",")
+      destList = _.map tmpDestList, (item) ->
+        item = buildingCode + floor + item
+
+      i = 0
+      while i < destList.length
+        edgesList.push
+          name: "edge"
+          SUID: "idx" + idx + buildingCode + floor + "e" + u.toString()
+          source: buildingCode + floor + target.nodeId
+          target: destList[i]
+          interaction: "undirected"
+          shared_interaction: "undirected"
+
+        u++
+        i++
+        return edgesList
+
+    
+    # actual process goes here
+    mapObj =
+      nodes: _.map(input.map, remapNodes)
+      edges: _.flatten(_.map(input.map), remapEdges)
+
+    async.series
+      createNodes: (cb) ->
+        Node.saveMany mapObj.nodes, (err) ->
+          cb err
           return
 
-        createEdges: (cb) ->
-          Edge.saveMany mapObj.edges, (err) ->
-            cb err
-            return
+        return
 
+      createEdges: (cb) ->
+        Edge.saveMany mapObj.edges, (err) ->
+          cb err
           return
-      , (err) ->
-        cbDone err, mapObj
-      return
 
-    # Do actual request here
-    request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=#{building}&Level=#{floor}").end (nusRes) ->
-      nusToCytoscape JSON.parse(nusRes.text), (err, obj) ->
-        return callback(err, obj)
+        return
+    , (err) ->
+      cbDone err, mapObj
+    return
+
+
+  # Do actual request here
+  request.get("http://showmyway.comp.nus.edu.sg/getMapInfo.php?Building=#{building}&Level=#{floor}").end (nusRes) ->
+    nusToCytoscape JSON.parse(nusRes.text), (err, obj) ->
+      return callback(err, obj)
 
 , shortestPathNodeIds: (nodeFrom, nodeTo, callback) ->
-    async.waterfall [
-      (cb) ->
-        MapService.showCyMap (err, result) ->
-          cb(err) if err
-          cy = cytoscape(
-            elements: result
-            ready: ->
-              dijkstra = @elements().dijkstra('#' + nodeFrom, ->
-                @data "weight"
-              )
-              path = dijkstra.pathTo(@$('#' + nodeTo))
-              cb null, path.jsons()
-          )
-          return
-
-
-      (elements, cb) ->
-        nodes = _.map(_.where(elements,
-          group: "nodes"
-        ), (node) ->
-          name: node.data.name
-        )
-        edges = _.map(_.where(elements,
-          group: "edges"
-        ), (edge) ->
-          source: edge.data.source
-          target: edge.data.target
-        )
-        pathList = []
-        curNode = nodeFrom
-        curEdge = {}
-        nextNode = {}
-        while edges.length > 0
-          curEdge = _.find(edges,
-            source: curNode
-          )
-          if curEdge
-            _.remove edges,
-              source: curNode
-
-            nextNode = curEdge.target
-          else
-            curEdge = _.find(edges,
-              target: curNode
+  async.waterfall [
+    (cb) ->
+      MapService.showCyMap (err, result) ->
+        cb(err) if err
+        cy = cytoscape(
+          elements: result
+          ready: ->
+            dijkstra = @elements().dijkstra('#' + nodeFrom, ->
+              @data "weight"
             )
-            _.remove edges,
-              target: curNode
+            path = dijkstra.pathTo(@$('#' + nodeTo))
+            cb null, path.jsons()
+        )
+        return
 
-            nextNode = curEdge.source
-          pathList.push curNode
-          curNode = nextNode
+
+    (elements, cb) ->
+      nodes = _.map(_.where(elements,
+        group: "nodes"
+      ), (node) ->
+        name: node.data.name
+      )
+      edges = _.map(_.where(elements,
+        group: "edges"
+      ), (edge) ->
+        source: edge.data.source
+        target: edge.data.target
+      )
+      pathList = []
+      curNode = nodeFrom
+      curEdge = {}
+      nextNode = {}
+      while edges.length > 0
+        curEdge = _.find(edges,
+          source: curNode
+        )
+        if curEdge
+          _.remove edges,
+            source: curNode
+
+          nextNode = curEdge.target
+        else
+          curEdge = _.find(edges,
+            target: curNode
+          )
+          _.remove edges,
+            target: curNode
+
+          nextNode = curEdge.source
         pathList.push curNode
-        cb null, pathList
+        curNode = nextNode
+      pathList.push curNode
+      cb null, pathList
 
-    ],
+  ],
 
-    (err, result) ->
-      callback(err, result)
+  (err, result) ->
+    callback(err, result)
 
 , shortestPath: (nodeFrom, nodeTo, callback) ->
   MapService.shortestPathNodeIds nodeFrom, nodeTo, (err, nodeIds) ->

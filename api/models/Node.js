@@ -16,6 +16,7 @@ module.exports = {
     SUID: {
       type: 'string', 
       required: true,
+      size: 24,
       unique: true
     },
 
@@ -32,6 +33,7 @@ module.exports = {
   beforeValidate: function(node, cb) {
 
     // check if coordinates exist in node
+    node.SUID = String(node.SUID)
 
     if (node.loc) {
     } else if (node.x &&  node.y && node.z) {
