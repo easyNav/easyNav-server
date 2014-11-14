@@ -51,12 +51,26 @@ module.exports = showCyMap: (callback) ->
   
   ## TODO: Fix!!  Somehow, SUID field of node is coerced into an int.
 
+  
+  ## Initial params
+  offset = {
+    x: 0
+    y: 0
+  }
+  buildingCode = '0' || 0 # default is 0
+  floor = String(floor) || 0 # default is 0
+
   if building is 'COM1'
     buildingCode = '1'
+    offset = { x: 0, y: -406 + 4024 - 732 }
+
   else if building is 'COM2'
     buildingCode = '2'
-  buildingCode = String(buildingCode) || 0 # default is 0
-  floor = String(floor) || 0 # default is 0
+    if floor is '2'
+      offset = { x: -61 + 11815, y: -732 }
+    else if floor is '3'
+      offset = { x: -61 + 11815, y: -732 }
+    
 
   sails.log "Loaded FLOOR=#{floor} BUILDING=#{building}."
   ## /TODO: Fix!!  Somehow, SUID field of node is coerced into an int.
@@ -71,8 +85,8 @@ module.exports = showCyMap: (callback) ->
       # SUID: target.nodeId
       SUID: buildingCode + floor + String(target.nodeId)
       loc:
-        x: target.x
-        y: target.y
+        x: String(parseInt(target.x) + parseInt(offset.x))
+        y: String(parseInt(target.y) + parseInt(offset.y))
         z: 0
 
     
