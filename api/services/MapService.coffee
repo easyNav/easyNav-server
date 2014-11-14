@@ -67,8 +67,10 @@ module.exports = showCyMap: (callback) ->
   else if building is 'COM2'
     buildingCode = '2'
     if floor is '2'
+      true
       offset = { x: -61 + 11815, y: -732 }
     else if floor is '3'
+      true
       offset = { x: -61 + 11815, y: -732 }
     
 
@@ -87,31 +89,31 @@ module.exports = showCyMap: (callback) ->
       loc:
         x: String(parseInt(target.x) + parseInt(offset.x))
         y: String(parseInt(target.y) + parseInt(offset.y))
+        # x: target.x
+        # y: target.y
         z: 0
 
     
     # iterator fn used for _.map
     remapEdges = (target, idx) ->
       edgesList = []
-      i = 0
       u = 0
       tmpDestList = target.linkTo.replace(RegExp(" ", "g"), "").split(",")
+      # sails.log tmpDestList
       destList = _.map tmpDestList, (item) ->
         item = buildingCode + floor + item
 
-      i = 0
-      while i < destList.length
+      for targetNodeName, i in destList
         edgesList.push
           name: "edge"
           SUID: "idx" + idx + buildingCode + floor + "e" + u.toString()
           source: buildingCode + floor + target.nodeId
-          target: destList[i]
+          target: targetNodeName
           interaction: "undirected"
           shared_interaction: "undirected"
 
         u++
-        i++
-        return edgesList
+      return edgesList
 
     
     # actual process goes here
